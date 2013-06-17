@@ -2,7 +2,7 @@
 =================
 
 Exemplo de algumas interações com a API do Google Maps<br>
-Nestes exemplos simples com JavaScript, HTML5 com a utilização da API do Google Maps<br>
+Exemplos simples com JavaScript, HTML5 e utilização da API do Google Maps<br>
 
 <br>Estes exemplos contém<br>
 
