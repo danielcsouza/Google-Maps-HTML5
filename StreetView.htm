@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html lang="pt_br">
+<head>
+<meta charset=utf-8>
+<title>Google Maps com Street View</title>
+<script type="text/javascript" src="https://maps.google.com.br/maps/api/js?sensor=false"></script>
+<style type="text/css">
+html { 
+		height: 100%;
+}
+	
+body {
+	   	height: 100%; 
+		margin: 0px; 
+		padding: 0px; 
+	  
+}
+#mapa_normal { 
+	height: 70%;
+	float:left;
+	width:40%;
+}
+
+#mapa_view{
+	float:right;
+	width:45%;
+	height:70%;      
+   }
+#instrucoes{
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#F00;	
+	
+}
+#div_exibe{
+	clear:both;		
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:18px;
+	color:#000;	
+	
+}
+#posicao_atual{
+
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:18px;
+	color:#069;	
+	
+}
+</style>
+<script language="javascript">
+function initialize()
+{
+	var LocalInicial = new google.maps.LatLng(-22.545359,-44.169944);
+	var MapaOpcoes = {
+						  center: LocalInicial,
+						  zoom: 16,
+						  mapTypeId: google.maps.MapTypeId.ROADMAP
+					};
+		var map = new google.maps.Map(
+		    document.getElementById("mapa_normal"), MapaOpcoes);
+
+		var ViewOpcoes = {
+							  position: LocalInicial,
+							  pov: {
+								    heading: 190,
+								    pitch: 10,
+								    zoom: 1
+								  }
+						};
+	
+	var panorama = new  google.maps.StreetViewPanorama(document.getElementById("mapa_view"), ViewOpcoes);
+		map.setStreetView(panorama);
+
+	google.maps.event.addListener(panorama, 'position_changed', function() {
+      var NovaPosicao = document.getElementById('posicao_atual');
+         NovaPosicao.innerHTML = panorama.getPosition();
+  });
+
+}
+</script>
+</head>
+
+<header id="cabecalho">
+	<h2>Experimentos com Google Maps (Street View)</h2>
+</header>
+<body onload="initialize()">
+<div id="instrucoes">Arraste o Pegman (bonequinho) no mapa para ver a rua em tempo real ao lado</div><br>
+<div id="mapa_normal"></div>
+<div id="mapa_view"></div>
+<br>
+<div id="div_exibe">
+Posi&ccedil;&atilde;o Atual (GPS) .:<div id="posicao_atual"></div>
+</div>
+</body>
+</html>

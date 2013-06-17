@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Marcador personalizado Google Maps</title>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<script type="text/javascript" src="https://maps.google.com.br/maps/api/js?sensor=false"></script>
+</head>
+<style type="text/css">
+  html { height: 100% }
+  body { height: 100%; margin: 0px; padding: 0px }
+  #map_canvas { height: 100% }
+</style>
+<script type="text/javascript">
+ var geocoder;
+  var map;
+
+  function initialize() {
+	  // inicializando mapa com a latitude especifica
+   geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(-22.547817,-44.171219);
+    var myOptions = {
+      zoom: 16,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+ 
+  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+  var image = 'map_marker.png'; //imagem do marcador
+  
+  var myLatLng = new google.maps.LatLng(-22.549263,-44.17093); // escolhendo a latitude do marcador
+  
+  var beachMarker = new google.maps.Marker({
+      position: myLatLng,
+      map: map,
+	  draggable:true,  
+      animation: google.maps.Animation.BOUNCE,
+	  title:"Nome da sua empresa",
+      icon: image
+  });
+  
+  var contentString = '<div id="content">'+
+    '<div id="siteNotice">'+
+    '</div>'+
+    '<h2 id="firstHeading" class="firstHeading">Título com nome da sua empresa</h2>'+
+    '<div id="bodyContent">'+
+    '<p><b>Nome Empresa</b><br> ' +
+    '<img src="http://keoferta.com.br/wp-content/uploads/2011/10/empresa.jpg"  width="150" align="left" hspace="5">Texto sobre sua empresa<br>'+
+    '  bla bla bla ... '+
+    '</p>'+
+    '<p>Acesse o site <a href="#">'+
+    'www.suaempresa.com.br</p>'+
+    '</div>'+
+    '</div>';
+
+var infowindow = new google.maps.InfoWindow({
+    content: contentString
+});
+  
+  google.maps.event.addListener(beachMarker, 'click', function() {
+  infowindow.open(map,beachMarker);
+});
+
+ function codeAddress() {
+    var address = document.getElementById("address").value;
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        map1.setCenter(results[0].geometry.location);
+        var beachMarker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+        });
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });  
+	}
+  }
+</script>
+<body onload="initialize()">
+  <div id="map_canvas" style="width:50%; height:80%"></div>
+</body>
+</html>

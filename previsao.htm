@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+<head>
+	<title>Google Maps - Previsão do Tempo</title>
+	<meta name="apple-mobile-web-app-capable" content="yes">
+  	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="apple-mobile-web-app-capable" content="yes"> 
+	<meta name="author" content="Daniel Carlos de Souza" />
+	<meta name="description" content="Previsão do Tempo com google maps" />
+	<script type="text/javascript" src="https://maps.google.com.br/maps/api/js?sensor=false&libraries=weather"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+</head>
+<style type="text/css">
+html { 
+		height: 100%;
+}
+	
+body {
+	   	height: 100%; 
+		margin: 0px; 
+		padding: 0px; 
+	  
+}
+#mapa_normal { 
+	height: 70%;
+	float:left;
+	width:100%;
+}
+#instrucoes{
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#F00;	
+	
+}
+#div_exibe{
+	clear:both;		
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:18px;
+	color:#000;	
+	
+}
+#posicao_atual{
+
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:18px;
+	color:#069;	
+	
+}
+</style>
+<script language="javascript">
+function Localiza()
+{
+	var geocoder = new google.maps.Geocoder();	
+	
+	var cidade = document.getElementById("cidade").value;
+
+	var novaLatnovaLong;	
+	geocoder.geocode( { 'address': cidade}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) 
+	  {
+      	    novaLatnovaLong = results[0].geometry.location;
+			var MapaOpcoes2 = {
+						  center: novaLatnovaLong,
+						  zoom: 11,
+						  mapTypeId: google.maps.MapTypeId.ROADMAP
+				};
+				
+		document.getElementById("mapa_normal").innerHTML='';
+
+		var novo_mapa = new google.maps.Map(document.getElementById("mapa_normal"), MapaOpcoes2);
+
+			  var weatherLayer = new google.maps.weather.WeatherLayer({
+		  temperatureUnits: google.maps.weather.TemperatureUnit.CELSIUS
+		});
+		weatherLayer.setMap(novo_mapa);
+
+		var cloudLayer = new google.maps.weather.CloudLayer();
+		cloudLayer.setMap(novo_mapa);   
+			
+	 }
+	 else
+	 {
+	 alert("Erro encotrado: " + status);	 
+	 }
+
+	});
+	
+}	
+
+$(document).ready(function () {
+   $('#cidade').keypress(function (e) {
+        var code = null;
+        code = (e.keyCode ? e.keyCode : e.which);                
+        return (code == 13) ? 
+		
+		alert("Clique no botao Procurar"): true;
+   });
+});
+</script>
+<header id="cabecalho">
+	<h2>Experimentos com Google Maps (Previsão do  Tempo)</h2>
+</header>
+<body>
+<div id="instrucoes">Clique na cidade para ver a previsão para outros dias</div><br>
+<input type="text" name="cidade" placeholder="Digite a cidade" id="cidade"><input type="button" value="Procurar" onClick="Localiza()" >
+<div id="mapa_normal"></div>
+<br>
+<div id="div_exibe">
+<div id="posicao_atual"></div>
+</div>
+</body>
+</html>

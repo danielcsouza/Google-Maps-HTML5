@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html lang="pt_br">
+<head>
+<meta charset="utf-8">
+<title>Testando Google Maps - Rotas</title>
+<script type="text/javascript" src="https://maps.google.com.br/maps/api/js?sensor=false&libraries=places"></script>
+<style type="text/css">
+html { 
+		height: 100% 
+}
+	
+body {
+	   	height: 100%; 
+		margin: 0px; 
+		padding: 0px 
+	  
+}
+#mapa { 
+	height: 100%;
+	float:right;
+	width:70%;
+}
+
+#caminho{
+	float:left;
+	width:25%;
+	height:10%;      
+   }
+</style>
+<script language="javascript">
+var opcoes_maps = {
+  draggable: true
+};
+
+var MostraDirecao;
+//var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);;
+var ServicoGoogle = new google.maps.DirectionsService();
+var map;
+
+function initialize() {
+  MostraDirecao = new google.maps.DirectionsRenderer(opcoes_maps);
+  // centralizando mapa
+  var barra_mansa = new google.maps.LatLng(-22.547817,-44.171219);
+  var mapOptions = {
+    zoom:7,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    center: barra_mansa
+  }
+  map = new google.maps.Map(document.getElementById("mapa"), mapOptions);
+  MostraDirecao.setMap(map);
+  MostraDirecao.setPanel(document.getElementById("caminho"));
+  
+  var defaultBounds = new google.maps.LatLngBounds(
+  new google.maps.LatLng(-22.547817,-44.171219));
+  
+
+  var input_origem = document.getElementById('origem');
+  var options = {
+  bounds: defaultBounds,
+  types: ['geocode']
+};
+
+autocomplete1 = new google.maps.places.Autocomplete(input_origem, options);
+
+  var input_destino = document.getElementById('destino');
+  var options = {
+  bounds: defaultBounds,
+  types: ['geocode']
+};
+
+autocomplete2 = new google.maps.places.Autocomplete(input_destino, options);
+
+}
+
+
+// calculando rota
+function calculaRota() {
+  var origem = document.getElementById("origem").value;
+  var destino = document.getElementById("destino").value;
+  
+  
+  var request = {
+    origin:origem,
+    destination:destino,
+    travelMode: google.maps.TravelMode.DRIVING
+  };
+  ServicoGoogle.route(request, function(result, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      MostraDirecao.setDirections(result);
+    }
+  });
+}
+</script>
+
+</head>
+<header id="cabecalho">
+	<h2>Experimentos com Google Maps</h2>
+</header>
+<body onload="initialize()">
+<form>
+<img src="A.png">&nbsp;De.:<input type="text" name="origem" id="origem" size="45">
+<br>
+<img src="B.png">&nbsp;Para.:<input type="text" name="origem" id="destino" size="45"><br>
+<input type="button" value="Como chegar" onClick="calculaRota();">
+</form>
+<div id="caminho"></div>
+<div id="mapa"></div>
+
+
+</body>
+</html>
